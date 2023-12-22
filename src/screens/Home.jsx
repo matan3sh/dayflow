@@ -1,10 +1,23 @@
+import { useEffect, useState } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
 import { ActivityItem } from "../components/activity/ActivityItem"
 import { ActivityTimer } from "../components/activity/ActivityTimer"
 import { FlowRow, FlowText } from "../components/overrides"
-import data from "../data/activities.json"
+import defaultItems from "../data/activities.json"
+import { loadDayFlowItems } from "../storage"
 
 export const ActivityHomeScreen = () => {
+  const [activities, setActivities] = useState([])
+
+  useEffect(() => {
+    const load = async () => {
+      const items = await loadDayFlowItems()
+      !items ? setActivities(defaultItems) : setActivities(items)
+    }
+
+    load()
+  }, [])
+
   const checkActivity = ({ id, state }) => {
     console.log({ id, state })
   }
@@ -17,7 +30,7 @@ export const ActivityHomeScreen = () => {
         <FlowText style={styles.text}>Add</FlowText>
       </FlowRow>
       <FlatList
-        data={data}
+        data={activities}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => (
           <ActivityItem {...item} onActivityChange={checkActivity} />
