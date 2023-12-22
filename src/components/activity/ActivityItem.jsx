@@ -3,16 +3,30 @@ import { Animated, PanResponder, StyleSheet } from "react-native"
 import { COLORS } from "../../variables/styles"
 import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
-export const ActivityItem = ({ title }) => {
+const TRESHOLD = 60
+
+export const ActivityItem = ({ title, id, onActivityChange }) => {
   const pan = useRef(new Animated.ValueXY()).current
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderTerminationRequest: () => false,
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-        useNativeDriver: false,
-      }),
+      onPanResponderMove: (event, gestureState) => {
+        const currentX = gestureState.dx
+
+        if (currentX > TRESHOLD) {
+          onActivityChange({ id, state: true })
+        }
+
+        if (currentX < -TRESHOLD) {
+          onActivityChange({ id, state: false })
+        }
+
+        Animated.event([null, { dx: pan.x, dy: pan.y }], {
+          useNativeDriver: false,
+        })(event, gestureState)
+      },
       onPanResponderRelease: () => {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
