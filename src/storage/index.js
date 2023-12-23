@@ -28,4 +28,21 @@ const loadDayFlowItems = async () => {
   return loadData("dayFlowItems")
 }
 
-export { loadData, loadDayFlowItems, storeData, storeDayFlowItems }
+const isAsyncStorageEnabled = async () => {
+  try {
+    await AsyncStorage.setItem("flowTestKey", "testFlowValue")
+    await AsyncStorage.getItem("flowTestKey")
+    return true
+  } catch (error) {
+    console.error("Storage is not enabled:", error)
+    return false
+  }
+}
+
+export {
+  isAsyncStorageEnabled,
+  loadData,
+  loadDayFlowItems,
+  storeData,
+  storeDayFlowItems,
+}

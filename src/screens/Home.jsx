@@ -6,8 +6,10 @@ import { FlowRow, FlowText } from "../components/overrides"
 import defaultItems from "../data/activities.json"
 import { loadDayFlowItems } from "../storage"
 
-export const ActivityHomeScreen = () => {
+export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   const [activities, setActivities] = useState([])
+
+  console.log(isStorageEnabled)
 
   useEffect(() => {
     const load = async () => {
