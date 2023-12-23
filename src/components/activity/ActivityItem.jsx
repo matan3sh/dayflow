@@ -5,7 +5,7 @@ import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
 const TRESHOLD = 60
 
-export const ActivityItem = ({ title, id, onActivityChange }) => {
+export const ActivityItem = ({ title, id, isActive, onActivityChange }) => {
   const pan = useRef(new Animated.ValueXY()).current
 
   const panResponder = useRef(
@@ -36,6 +36,10 @@ export const ActivityItem = ({ title, id, onActivityChange }) => {
     })
   ).current
 
+  const itemBackground = isActive
+    ? { backgroundColor: COLORS.semiDarkGray }
+    : { backgroundColor: COLORS.darkGray }
+
   return (
     <Animated.View
       {...panResponder.panHandlers}
@@ -45,7 +49,7 @@ export const ActivityItem = ({ title, id, onActivityChange }) => {
         userSelect: "none",
       }}
     >
-      <FlowHighlightView style={styles.itemContainer}>
+      <FlowHighlightView style={{ ...styles.itemContainer, ...itemBackground }}>
         <FlowRow style={styles.row}>
           <FlowText>{title}</FlowText>
           <FlowText style={styles.time}>00:00:00</FlowText>

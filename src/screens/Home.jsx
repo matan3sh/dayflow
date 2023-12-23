@@ -20,11 +20,15 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
 
   const checkActivity = ({ id, state }) => {
     setActivities((activities) => {
-      const candidateIdx = activities.findIndex((a) => a.id === id)
+      const candidateIdx = activities.findIndex(
+        (activity) => activity.id === id
+      )
 
       if (candidateIdx > -1) {
-        const newActivities = activities.map((a) =>
-          a.id === id ? { ...a, isActive: state } : { ...a, isActive: false }
+        const newActivities = activities.map((activity) =>
+          activity.id === id
+            ? { ...activity, isActive: state }
+            : { ...activity, isActive: false }
         )
 
         console.log(JSON.stringify(newActivities.map((a) => a.isActive)))
