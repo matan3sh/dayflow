@@ -24,7 +24,7 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
         (activity) => activity.id === id
       )
 
-      if (candidateIdx > -1) {
+      if (candidateIdx > -1 && activities[candidateIdx].isActive !== state) {
         const newActivities = activities.map((activity) =>
           activity.id === id
             ? { ...activity, isActive: state }
