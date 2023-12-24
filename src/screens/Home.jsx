@@ -4,7 +4,7 @@ import { ActivityItem } from "../components/activity/ActivityItem"
 import { ActivityTimer } from "../components/activity/ActivityTimer"
 import { FlowRow, FlowText } from "../components/overrides"
 import defaultItems from "../data/activities.json"
-import { loadDayFlowItems } from "../storage"
+import { loadDayFlowItems, storeDayFlowItems } from "../storage"
 
 export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   const [activities, setActivities] = useState([])
@@ -17,6 +17,12 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
 
     load()
   }, [])
+
+  const saveToStorage = (data) => {
+    if (isStorageEnabled) {
+      storeDayFlowItems(data)
+    }
+  }
 
   const checkActivity = ({ id, state }) => {
     setActivities((activities) => {
@@ -31,7 +37,7 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
             : { ...activity, isActive: false }
         )
 
-        console.log(JSON.stringify(newActivities.map((a) => a.isActive)))
+        saveToStorage(newActivities)
         return newActivities
       }
 
