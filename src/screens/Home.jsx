@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
 import { ActivityItem } from "../components/activity/ActivityItem"
 import { ActivityTimer } from "../components/activity/ActivityTimer"
@@ -9,6 +9,9 @@ import { loadDayFlowItems, storeDayFlowItems } from "../storage"
 export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   const [activities, setActivities] = useState([])
 
+  const startTimeRef = useRef(0)
+  const timeRef = useRef(0)
+
   useEffect(() => {
     const load = async () => {
       const items = await loadDayFlowItems()
@@ -17,6 +20,23 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
 
     load()
   }, [])
+
+  useEffect(() => {
+    startTimeRef.current = new Date()
+    // tick()
+  }, [])
+
+  const tick = () => {
+    const currentTime = Date.now()
+    const timeDelta = currentTime - startTimeRef.current
+
+    if (timeDelta >= 100) {
+      timeRef.current += timeDelta
+      startTimeRef.current = Date.now()
+    }
+
+    requestAnimationFrame(tick)
+  }
 
   const saveToStorage = (data) => {
     if (isStorageEnabled) {
