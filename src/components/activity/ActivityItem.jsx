@@ -1,6 +1,7 @@
 import { useRef } from "react"
 import { Animated, PanResponder, StyleSheet } from "react-native"
 import { COLORS } from "../../variables/styles"
+import { LoadingDots } from "../common/LoadingDots"
 import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
 const TRESHOLD = 60
@@ -52,7 +53,11 @@ export const ActivityItem = ({ title, id, isActive, onActivityChange }) => {
       <FlowHighlightView style={{ ...styles.itemContainer, ...itemBackground }}>
         <FlowRow style={styles.row}>
           <FlowText>{title}</FlowText>
-          <FlowText style={styles.time}>00:00:00</FlowText>
+          {isActive ? (
+            <LoadingDots />
+          ) : (
+            <FlowText style={styles.time}>00:00:00</FlowText>
+          )}
         </FlowRow>
       </FlowHighlightView>
     </Animated.View>
