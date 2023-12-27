@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
 import { ActivityItem } from "../components/activity/ActivityItem"
 import { ActivityTimer } from "../components/activity/ActivityTimer"
@@ -11,6 +11,11 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
 
   const startTimeRef = useRef(0)
   const timeRef = useRef(0)
+  const timerRequestRef = useRef(-1)
+
+  const activeItem = useMemo(() => {
+    return activities?.find((a) => a.isActive)
+  }, [activities])
 
   useEffect(() => {
     const load = async () => {
@@ -22,9 +27,16 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   }, [])
 
   useEffect(() => {
-    startTimeRef.current = new Date()
-    // tick()
-  }, [])
+    if (activeItem) {
+      startTimeRef.current = new Date()
+      tick()
+    } else {
+      startTimeRef.current = 0
+      cancelAnimationFrame(timerRequestRef.current)
+    }
+
+    return () => cancelAnimationFrame(timerRequestRef.current)
+  }, [activeItem])
 
   const tick = () => {
     const currentTime = Date.now()
@@ -35,7 +47,7 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
       startTimeRef.current = Date.now()
     }
 
-    requestAnimationFrame(tick)
+    timerRequestRef.current = requestAnimationFrame(tick)
   }
 
   const saveToStorage = (data) => {
