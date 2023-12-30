@@ -5,6 +5,7 @@ import { ActivityTimer } from "../components/activity/ActivityTimer"
 import { FlowRow, FlowText } from "../components/overrides"
 import defaultItems from "../data/activities.json"
 import { loadDayFlowItems, storeDayFlowItems } from "../storage"
+import { usePrevious } from "../utils/functions"
 
 export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   const [activities, setActivities] = useState([])
@@ -17,6 +18,8 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
     return activities?.find((a) => a.isActive)
   }, [activities])
 
+  const previousActiveItem = usePrevious(activeItem)
+
   useEffect(() => {
     const load = async () => {
       const items = await loadDayFlowItems()
@@ -27,11 +30,16 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
   }, [])
 
   useEffect(() => {
+    const isSameItem = activeItem && activeItem?.id === previousActiveItem?.id
+
     if (activeItem) {
-      startTimeRef.current = new Date()
+      if (!isSameItem) {
+        timeRef.current = activeItem.time
+        startTimeRef.current = new Date()
+      }
       tick()
     } else {
-      startTimeRef.current = 0
+      timeRef.current = 0
       cancelAnimationFrame(timerRequestRef.current)
     }
 
