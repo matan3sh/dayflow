@@ -1,15 +1,18 @@
 import { StyleSheet } from "react-native"
+import { formatTime } from "../../utils/functions"
 import { COLORS } from "../../variables/styles"
 import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
-export const ActivityTimer = () => {
+export const ActivityTimer = ({ time }) => {
   return (
     <FlowHighlightView style={styles.timerContainer}>
       <FlowRow style={styles.row}>
         <FlowText>No Activity</FlowText>
       </FlowRow>
       <FlowRow style={styles.row}>
-        <FlowText style={styles.time}>00:00:00</FlowText>
+        <FlowText style={{ ...styles.time, fontVariant: ["tabular-nums"] }}>
+          {formatTime(time)}
+        </FlowText>
       </FlowRow>
     </FlowHighlightView>
   )
