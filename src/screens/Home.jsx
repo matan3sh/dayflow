@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, Platform, StyleSheet, View } from "react-native"
+import { AppState, FlatList, Platform, StyleSheet, View } from "react-native"
 import { ActivityItem } from "../components/activity/ActivityItem"
 import { ActivityTimer } from "../components/activity/ActivityTimer"
 import { FlowRow, FlowText } from "../components/overrides"
@@ -42,6 +42,15 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
     if (Platform.OS === "web") {
       window.addEventListener("beforeunload", save)
       return () => window.removeEventListener("beforeunload", save)
+    } else {
+      const handleAppStateChange = (appState) => {
+        if (appState === "background" || appState === "inactive") {
+          save()
+        }
+      }
+
+      const sub = AppState.addEventListener("change", handleAppStateChange)
+      return () => sub.remove()
     }
   }, [])
 
