@@ -41,6 +41,7 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
       tick()
     } else {
       timeRef.current = 0
+      setTime(0)
       cancelAnimationFrame(timerRequestRef.current)
     }
 
@@ -97,7 +98,7 @@ export const ActivityHomeScreen = ({ isStorageEnabled }) => {
 
   return (
     <View style={styles.screenContainer}>
-      <ActivityTimer time={time} />
+      <ActivityTimer time={time} title={activeItem?.title ?? "No Activity"} />
       <FlowRow style={styles.listHeading}>
         <FlowText style={styles.text}>Activities</FlowText>
         <FlowText style={styles.text}>Add</FlowText>

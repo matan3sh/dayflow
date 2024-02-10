@@ -3,11 +3,11 @@ import { formatTime } from "../../utils/functions"
 import { COLORS } from "../../variables/styles"
 import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
-export const ActivityTimer = ({ time }) => {
+export const ActivityTimer = ({ time, title }) => {
   return (
     <FlowHighlightView style={styles.timerContainer}>
       <FlowRow style={styles.row}>
-        <FlowText>No Activity</FlowText>
+        <FlowText>{title}</FlowText>
       </FlowRow>
       <FlowRow style={styles.row}>
         <FlowText style={{ ...styles.time, fontVariant: ["tabular-nums"] }}>

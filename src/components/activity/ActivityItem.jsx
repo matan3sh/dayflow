@@ -1,12 +1,19 @@
 import { useRef } from "react"
 import { Animated, PanResponder, StyleSheet } from "react-native"
+import { formatTime } from "../../utils/functions"
 import { COLORS } from "../../variables/styles"
 import { LoadingDots } from "../common/LoadingDots"
 import { FlowHighlightView, FlowRow, FlowText } from "../overrides"
 
 const TRESHOLD = 60
 
-export const ActivityItem = ({ title, id, isActive, onActivityChange }) => {
+export const ActivityItem = ({
+  title,
+  id,
+  isActive,
+  time,
+  onActivityChange,
+}) => {
   const pan = useRef(new Animated.ValueXY()).current
 
   const panResponder = useRef(
@@ -56,7 +63,7 @@ export const ActivityItem = ({ title, id, isActive, onActivityChange }) => {
           {isActive ? (
             <LoadingDots />
           ) : (
-            <FlowText style={styles.time}>00:00:00</FlowText>
+            <FlowText style={styles.time}>{formatTime(time)}</FlowText>
           )}
         </FlowRow>
       </FlowHighlightView>
